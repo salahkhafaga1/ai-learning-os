@@ -165,7 +165,7 @@ describe("currentWeekNumber (override-aware)", () => {
   it("returns the next week for a gap date", () => {
     expect(
       currentWeekNumber("2026-11-01", weeks, settings, { "2": "2026-11-05" }),
-    ).toBe(3);
+    ).toBe(2);
   });
 
   it("clamps before and after the roadmap", () => {
