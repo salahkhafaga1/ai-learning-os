@@ -6,6 +6,7 @@ import {
   phaseStatusFor,
   phaseTaskProgress,
   taskProgress,
+  weekStatusFor,
   weekTaskProgress,
 } from "@/domain/progress";
 import type {
@@ -265,5 +266,42 @@ describe("overdueTasks", () => {
         overdueTasks(oRoadmap, status, settings, { "1": "2026-11-01" }, "2026-10-30"),
       ),
     ).toEqual([]);
+  });
+});
+
+describe("weekStatusFor", () => {
+  it("reports not_started when every task is todo or absent", () => {
+    const week = makeWeek(1, "phase-a", [makeTask("t1", 1), makeTask("t2", 1)]);
+    expect(weekStatusFor(week, {})).toBe("not_started");
+    expect(weekStatusFor(week, { t1: "todo", t2: "todo" })).toBe("not_started");
+  });
+
+  it("reports in_progress when any task is in_progress or done", () => {
+    const week = makeWeek(1, "phase-a", [makeTask("t1", 1), makeTask("t2", 1)]);
+    expect(weekStatusFor(week, { t1: "in_progress" })).toBe("in_progress");
+    expect(weekStatusFor(week, { t1: "done" })).toBe("in_progress");
+  });
+
+  it("reports blocked when any unmet task is blocked", () => {
+    const week = makeWeek(1, "phase-a", [makeTask("t1", 1), makeTask("t2", 1)]);
+    expect(weekStatusFor(week, { t1: "blocked" })).toBe("blocked");
+    expect(weekStatusFor(week, { t1: "blocked", t2: "done" })).toBe("blocked");
+  });
+
+  it("reports completed only when every eligible task is done (skipped excluded)", () => {
+    const week = makeWeek(1, "phase-a", [
+      makeTask("t1", 1),
+      makeTask("t2", 1),
+      makeTask("t3", 1),
+    ]);
+    expect(weekStatusFor(week, { t1: "done", t2: "done" })).toBe("in_progress");
+    expect(weekStatusFor(week, { t1: "done", t2: "done", t3: "skipped" })).toBe(
+      "completed",
+    );
+  });
+
+  it("reports not_started for an all-skipped week (zero eligible)", () => {
+    const week = makeWeek(1, "phase-a", [makeTask("t1", 1)]);
+    expect(weekStatusFor(week, { t1: "skipped" })).toBe("not_started");
   });
 });

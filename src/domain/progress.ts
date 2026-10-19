@@ -49,6 +49,35 @@ export function weekTaskProgress(
   return taskProgress(weekTaskIds(week), status);
 }
 
+export function weekStatusFor(
+  week: Week,
+  status: Record<string, TaskStatus>,
+): PhaseStatus {
+  const progress = weekTaskProgress(week, status);
+  if (progress.eligible > 0 && progress.completed === progress.eligible) {
+    return "completed";
+  }
+
+  let sawBlocked = false;
+  let sawStarted = false;
+  for (const task of week.tasks) {
+    const value = status[task.id] ?? "todo";
+    if (value === "blocked") {
+      sawBlocked = true;
+    } else if (value === "in_progress" || value === "done") {
+      sawStarted = true;
+    }
+  }
+
+  if (sawBlocked) {
+    return "blocked";
+  }
+  if (sawStarted) {
+    return "in_progress";
+  }
+  return "not_started";
+}
+
 export function phaseTaskProgress(
   phase: Phase,
   weeks: Week[],

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { PageHeader } from "@/components/ui/page-header";
+import { PhaseView } from "@/components/roadmap/phase-view";
 import { Skeleton } from "@/components/ui/skeleton";
 import { allPhases } from "@/data/phases";
 import { ar } from "@/lib/i18n/ar";
@@ -20,16 +20,7 @@ async function PhaseContent({ params }: PageProps<"/roadmap/[phaseId]">) {
     notFound();
   }
 
-  const phaseLabel = ar["common.phase"].replace("{n}", String(phase.number));
-
-  return (
-    <div className="flex flex-col gap-6">
-      <PageHeader
-        title={phase.title}
-        subtitle={`${phaseLabel} · ${phase.shortTitle}`}
-      />
-    </div>
-  );
+  return <PhaseView phaseId={phaseId} />;
 }
 
 export default function PhasePage(props: PageProps<"/roadmap/[phaseId]">) {
