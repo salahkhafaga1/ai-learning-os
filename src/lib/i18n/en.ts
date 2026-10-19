@@ -329,6 +329,9 @@ export const en: Dict = {
     "Saved data could not be read; a raw backup was kept and we started fresh.",
   "warning.incompatible_version":
     "Saved data is from a newer version and is incompatible; we started fresh.",
+  "warning.backup_note":
+    "A raw copy of the old data is kept under storage key {key}.",
+  "warning.openSettings": "Open settings",
   "warning.storage_unavailable":
     "Local storage is unavailable in this browser; progress lasts for this session only.",
   "warning.write_failed":

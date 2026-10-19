@@ -57,8 +57,18 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     null,
   );
   const repoRef = useRef<LearningRepository | null>(null);
+  const initializedRef = useRef(false);
 
   useEffect(() => {
+    // The load must run exactly once per provider instance: recovery is not
+    // idempotent (it clears the broken key), so a second run would read a clean
+    // store and erase the recovery warning before it is shown (dev StrictMode
+    // double-invokes mount effects, and the first run's publish was cancelable).
+    if (initializedRef.current) {
+      return;
+    }
+    initializedRef.current = true;
+
     let repo: LearningRepository;
     let fallbackWarning: LoadWarningCode | undefined;
 
@@ -72,12 +82,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     repoRef.current = repo;
     const result = repo.load();
     dispatch({ type: "data/load", state: result.state });
-    const publish = setTimeout(() => {
-      setLoadWarning(result.warning ?? fallbackWarning);
-      setStorageKind(repo.kind);
-      setHydration("ready");
-    }, 0);
-    return () => clearTimeout(publish);
+    setLoadWarning(result.warning ?? fallbackWarning);
+    setStorageKind(repo.kind);
+    setHydration("ready");
   }, []);
 
   useEffect(() => {
