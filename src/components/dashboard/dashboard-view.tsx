@@ -63,7 +63,7 @@ export function DashboardView() {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 href="/log"
-                className="inline-flex h-8 items-center justify-center rounded-lg bg-accent px-3 text-xs font-medium text-white transition-colors hover:bg-accent-hover"
+                className="inline-flex h-8 items-center justify-center rounded-lg bg-accent px-3 text-xs font-medium text-app transition-colors hover:bg-accent-hover"
               >
                 {t("dashboard.onboarding.cta")}
               </Link>

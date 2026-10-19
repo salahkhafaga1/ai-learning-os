@@ -80,7 +80,7 @@ export function PhaseCard({
               className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
             >
               {t("roadmap.openPhase")}
-              <ArrowLeft aria-hidden="true" className="size-3.5" />
+              <ArrowLeft aria-hidden="true" className="size-3.5 ltr:-scale-x-100" />
             </Link>
           </div>
         </div>

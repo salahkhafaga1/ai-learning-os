@@ -29,10 +29,10 @@ export function NextTaskCard({ next }: { next: DashboardModel["next"] }) {
             <div className="mt-auto">
               <Link
                 href={`/week/${next.week.number}`}
-                className="inline-flex h-8 items-center justify-center gap-1 rounded-lg bg-accent px-3 text-xs font-medium text-white transition-colors hover:bg-accent-hover"
+                className="inline-flex h-8 items-center justify-center gap-1 rounded-lg bg-accent px-3 text-xs font-medium text-app transition-colors hover:bg-accent-hover"
               >
                 {t("dashboard.next.openWeek")}
-                <ArrowLeft aria-hidden="true" className="size-3.5" />
+                <ArrowLeft aria-hidden="true" className="size-3.5 ltr:-scale-x-100" />
               </Link>
             </div>
           </>

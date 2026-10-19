@@ -22,7 +22,7 @@ import { IssuesBanner } from "./issues-banner";
 import { WeekRow } from "./week-row";
 
 const NAV_LINK_CLASS =
-  "inline-flex h-8 items-center gap-1 rounded-lg border border-edge bg-surface-2 px-3 text-xs font-medium text-ink transition-colors hover:border-accent/60";
+  "inline-flex h-8 items-center gap-1 rounded-lg border border-edge bg-surface-2 px-3 text-xs font-medium text-ink transition-colors hover:border-accent/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 export function PhaseView({ phaseId }: { phaseId: string }) {
   const { state, hydration } = useAppState();
@@ -96,14 +96,14 @@ export function PhaseView({ phaseId }: { phaseId: string }) {
           <>
             {prevPhase ? (
               <Link href={`/roadmap/${prevPhase.id}`} className={NAV_LINK_CLASS}>
-                <ArrowRight aria-hidden="true" className="size-3.5" />
+                <ArrowRight aria-hidden="true" className="size-3.5 ltr:-scale-x-100" />
                 {t("phase.prevPhase")}
               </Link>
             ) : null}
             {nextPhase ? (
               <Link href={`/roadmap/${nextPhase.id}`} className={NAV_LINK_CLASS}>
                 {t("phase.nextPhase")}
-                <ArrowLeft aria-hidden="true" className="size-3.5" />
+                <ArrowLeft aria-hidden="true" className="size-3.5 ltr:-scale-x-100" />
               </Link>
             ) : null}
           </>

@@ -8,12 +8,12 @@
   --app-border: #22304d;
   --app-text: #e6edf7;
   --app-text-2: #a8b6cf;
-  --app-muted: #7386a6;
+  --app-muted: #7e92b5;
   --app-accent: #4c8dff;
   --app-accent-hover: #6fa4ff;
   --app-success: #3fb68b;
   --app-warning: #e5a54b;
-  --app-danger: #e5606b;
+  --app-danger: #e97a86;
   color-scheme: dark;
 }
 
@@ -24,12 +24,12 @@
   --app-border: #d6deeb;
   --app-text: #17233b;
   --app-text-2: #46566f;
-  --app-muted: #6b7a93;
-  --app-accent: #2f6fe4;
-  --app-accent-hover: #1f5bd0;
-  --app-success: #1f8f6a;
-  --app-warning: #b4771f;
-  --app-danger: #cf4557;
+  --app-muted: #56667f;
+  --app-accent: #2560d3;
+  --app-accent-hover: #1d51bd;
+  --app-success: #14694a;
+  --app-warning: #8a5915;
+  --app-danger: #b52f43;
   color-scheme: light;
 }
 

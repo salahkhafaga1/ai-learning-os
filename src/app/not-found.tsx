@@ -10,7 +10,7 @@ export default function NotFound() {
       <p className="max-w-md text-sm text-muted">{ar["notFound.body"]}</p>
       <Link
         href="/"
-        className="inline-flex h-10 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+        className="inline-flex h-10 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-app transition-colors hover:bg-accent-hover"
       >
         {ar["notFound.cta"]}
       </Link>

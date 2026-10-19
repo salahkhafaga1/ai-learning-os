@@ -8,7 +8,7 @@ import type {
 import { cn } from "./cn";
 
 const controlBase =
-  "w-full rounded-lg border border-edge bg-surface-2 px-3 text-sm text-ink placeholder:text-muted transition-colors focus:border-accent focus:outline-none disabled:cursor-not-allowed disabled:opacity-60";
+  "w-full rounded-lg border border-edge bg-surface-2 px-3 text-sm text-ink placeholder:text-muted transition-colors focus:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60";
 
 export function Label({
   className,

@@ -30,7 +30,7 @@ import { TaskRow } from "./task-row";
 import { WeekBlocker, WeekNotes } from "./week-notes";
 
 const NAV_LINK_CLASS =
-  "inline-flex h-8 items-center gap-1 rounded-lg border border-edge bg-surface-2 px-3 text-xs font-medium text-ink transition-colors hover:border-accent/60";
+  "inline-flex h-8 items-center gap-1 rounded-lg border border-edge bg-surface-2 px-3 text-xs font-medium text-ink transition-colors hover:border-accent/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -130,14 +130,14 @@ export function WeekView({ weekNumber }: { weekNumber: number }) {
           <>
             {prevWeek !== null ? (
               <Link href={`/week/${prevWeek}`} className={NAV_LINK_CLASS}>
-                <ArrowRight aria-hidden="true" className="size-3.5" />
+                <ArrowRight aria-hidden="true" className="size-3.5 ltr:-scale-x-100" />
                 {t("week.prevWeek")}
               </Link>
             ) : null}
             {nextWeek !== null ? (
               <Link href={`/week/${nextWeek}`} className={NAV_LINK_CLASS}>
                 {t("week.nextWeek")}
-                <ArrowLeft aria-hidden="true" className="size-3.5" />
+                <ArrowLeft aria-hidden="true" className="size-3.5 ltr:-scale-x-100" />
               </Link>
             ) : null}
           </>
