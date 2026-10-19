@@ -152,6 +152,7 @@ export const ar = {
   "roadmap.weeks": "{count} أسابيع",
   "roadmap.openPhase": "فتح المرحلة",
   "phase.objectives": "أهداف المرحلة",
+  "phase.pageTitle": "تفاصيل المرحلة",
   "phase.weeksTable": "أسابيع المرحلة",
   "phase.prevPhase": "المرحلة السابقة",
   "phase.nextPhase": "المرحلة التالية",
@@ -164,6 +165,7 @@ export const ar = {
   // Week page
   "week.prevWeek": "الأسبوع السابق",
   "week.nextWeek": "الأسبوع التالي",
+  "week.pageTitle": "تفاصيل الأسبوع",
   "week.range": "{start} → {end}",
   "week.objectives": "الأهداف",
   "week.topics": "المواضيع",

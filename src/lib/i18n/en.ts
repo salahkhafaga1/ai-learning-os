@@ -154,6 +154,7 @@ export const en: Dict = {
   "roadmap.weeks": "{count} weeks",
   "roadmap.openPhase": "Open phase",
   "phase.objectives": "Phase objectives",
+  "phase.pageTitle": "Phase details",
   "phase.weeksTable": "Phase weeks",
   "phase.prevPhase": "Previous phase",
   "phase.nextPhase": "Next phase",
@@ -166,6 +167,7 @@ export const en: Dict = {
   // Week page
   "week.prevWeek": "Previous week",
   "week.nextWeek": "Next week",
+  "week.pageTitle": "Week details",
   "week.range": "{start} → {end}",
   "week.objectives": "Objectives",
   "week.topics": "Topics",
