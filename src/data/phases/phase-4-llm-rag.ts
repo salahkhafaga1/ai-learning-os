@@ -1,0 +1,323 @@
+import type { Phase, Week } from "@/domain/types";
+import { makeTask, type PhaseBundle } from "./bundle";
+
+const phase: Phase = {
+  id: "phase-4",
+  number: 4,
+  title: "النماذج اللغوية الكبيرة و RAG",
+  shortTitle: "LLMs & RAG",
+  description:
+    "خمسة أسابيع في قلب الذكاء الاصطناعي الحديث: التوكنة والتضمينات، المحولات والانتباه، الاستدلال والهندسة التوجيهية، ثم بناء نظام RAG وتقييمه بصدق.",
+  objectives: [
+    "فهم كيف تعمل النماذج اللغوية من التوكنة حتى التوليد",
+    "بناء نظام RAG صغير وتقييمه بكشف الهلاوس والعيوب",
+  ],
+  weekNumbers: [15, 16, 17, 18, 19],
+};
+
+const weeks: Week[] = [
+  {
+    number: 15,
+    phaseId: "phase-4",
+    title: "التوكنة والتضمينات",
+    objectives: [
+      "فهم كيف تُقطّع النصوص إلى tokens وكيف تتحول إلى embeddings",
+      "إنتاج تضمينات والاستفادة منها في قياس التشابه بين النصوص",
+    ],
+    topics: [
+      "Tokenization",
+      "Embeddings",
+      "Similarity metrics",
+      "Sentence embeddings",
+      "Feature extraction",
+    ],
+    exercises: [
+      "حساب تشابه cosine بين 10 أزواج جمل عربية وإنجليزية وتفسير النتائج",
+      "تقطيع نص عربي يدويًا ومقارنته بتوكنة نموذج جاهز",
+    ],
+    deliverables: ["دفتر يقيس تشابه الجمل مع تفسير الأرقام مكتوبًا"],
+    masteryCriteria: [
+      "أشرح لماذا تختلف جودة التضمين بين نموذجين مختلفين",
+      "أستخدم التضمينات لإيجاد أقرب نص لاستعلام دون توجيه",
+    ],
+    tasks: [
+      makeTask(
+        "w15-t1",
+        15,
+        "دراسة التوكنة والتضمينات من دورة Hugging Face",
+        "study",
+        120,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w15-t2",
+        15,
+        "حساب تشابه cosine لعشر أزواج جمل مع تفسير",
+        "exercise",
+        120,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w15-t3",
+        15,
+        "تقطيع نص عربي يدويًا ومقارنتها بتوكنة النموذج",
+        "exercise",
+        60,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w15-t4",
+        15,
+        "تسليم الدفتر مع خلاصة مكتوبة عن حدود التضمينات",
+        "deliverable",
+        120,
+      ),
+    ],
+    resourceIds: ["hf-llm-course"],
+  },
+  {
+    number: 16,
+    phaseId: "phase-4",
+    title: "المحولات وآلية الانتباه",
+    objectives: [
+      "فهم بنية Transformer وطبقات attention على مستوى المفهوم والتطبيق",
+      "شرح تدفق المعلومات داخل نموذج توليدي بجملة قصيرة",
+    ],
+    topics: [
+      "Transformer architecture",
+      "Self-attention",
+      "Positional encoding",
+      "Decoder-only models",
+      "Context windows",
+    ],
+    exercises: [
+      "رسم مخطط انتباه مبسط خطوة بخطوة لجملة عربية قصيرة",
+      "مقارنة سلوك نموذجين بأحجام سياق مختلفة على نفس السؤال",
+    ],
+    deliverables: ["شرح تعليمي مكتوب لآلية attention بمثالك الخاص"],
+    masteryCriteria: [
+      "أشرح attention لزميل دون مصطلحات غامضة",
+      "أحدد أثر حجم السياق على مهام الاسترجاع والتلخيص",
+    ],
+    tasks: [
+      makeTask(
+        "w16-t1",
+        16,
+        "دراسة بنية المحولات والانتباه من دورة Hugging Face",
+        "study",
+        120,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w16-t2",
+        16,
+        "رسم مخطط انتباه مبسط لجملة قصيرة وتوثيق كل خطوة",
+        "exercise",
+        90,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w16-t3",
+        16,
+        "تجربة نموذجين بحجمي سياق مختلفين وتوثيق الفروق",
+        "exercise",
+        60,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w16-t4",
+        16,
+        "كتابة شرح تعليمي لآلية attention بأسلوبك",
+        "deliverable",
+        120,
+      ),
+    ],
+    resourceIds: ["hf-llm-course"],
+  },
+  {
+    number: 17,
+    phaseId: "phase-4",
+    title: "الاستدلال والهندسة التوجيهية",
+    objectives: [
+      "التحكم في سلوك النموذج عبر prompting منظم وقابل للتكرار",
+      "اختيار أسلوب استدلال مناسب (zero-shot / few-shot) لكل مهمة",
+    ],
+    topics: [
+      "Prompt patterns",
+      "Few-shot examples",
+      "Output formatting",
+      "Sampling controls",
+      "Iterative prompting",
+    ],
+    exercises: [
+      "إعادة صياغة prompt ضعيف إلى ثلاثة قوالب محسنة وقياس الفرق",
+      "تصميم prompt يلتزم بمخرجات JSON محددة البنية",
+    ],
+    deliverables: ["مكتبة prompts مجربة مع أمثلة مخرجات قبل/بعد"],
+    masteryCriteria: [
+      "أحوّل مهمة غامضة إلى prompt منظم من المحاولة الأولى",
+      "أكشف ضعف prompt وأشرح الخلل المسبب",
+    ],
+    tasks: [
+      makeTask(
+        "w17-t1",
+        17,
+        "دراسة أنماط الـ prompting من دورة Hugging Face",
+        "study",
+        90,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w17-t2",
+        17,
+        "تحسين ثلاثة prompts وقياس الفرق بجدول مقارنة",
+        "exercise",
+        120,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w17-t3",
+        17,
+        "تصميم prompt ينتج JSON صالحًا دائمًا",
+        "exercise",
+        60,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w17-t4",
+        17,
+        "تسليم مكتبة الـ prompts مع أمثلة قبل وبعد",
+        "deliverable",
+        90,
+      ),
+    ],
+    resourceIds: ["hf-llm-course"],
+  },
+  {
+    number: 18,
+    phaseId: "phase-4",
+    title: "البحث المتجهي وبناء RAG",
+    objectives: [
+      "بناء خط أنابيب RAG كامل: فهرسة ثم استرجاع ثم توليد",
+      "ضبط جودة الاسترجاع بقياسات بسيطة وقابلة للتكرار",
+    ],
+    topics: [
+      "Vector stores",
+      "Chunking strategies",
+      "Retrieval & ranking",
+      "RAG pipeline",
+      "Citations & grounding",
+    ],
+    exercises: [
+      "فهرسة مجموعة مستندات وتشغيل 10 أسئلة استرجاع",
+      "تحسين إستراتيجية chunking وقياس أثرها على النتائج",
+    ],
+    deliverables: ["نموذج أولي RAG يجيب من مستنداتك مع إحالة للمصدر"],
+    masteryCriteria: [
+      "أبني فهرسًا جديدًا وأربطه بمصدر توليد خلال جلسة واحدة",
+      "أفسر لماذا فشل استرجاع معيّن وأقترح إصلاحًا ملموسًا",
+    ],
+    tasks: [
+      makeTask(
+        "w18-t1",
+        18,
+        "دراسة أنابيب RAG والبحث المتجهي من دورة Hugging Face",
+        "study",
+        120,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w18-t2",
+        18,
+        "فهرسة مستنداتك وتشغيل 10 أسئلة استرجاع",
+        "exercise",
+        150,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w18-t3",
+        18,
+        "تجربة إستراتيجيتين chunking وقياس الأثر",
+        "exercise",
+        90,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w18-t4",
+        18,
+        "تسليم نموذج RAG الأولي مع إحالات المصادر",
+        "deliverable",
+        150,
+      ),
+    ],
+    resourceIds: ["hf-llm-course"],
+  },
+  {
+    number: 19,
+    phaseId: "phase-4",
+    title: "الهلاوس وتقييم الأنظمة",
+    objectives: [
+      "التعرف على أنماط الهلاوس (hallucinations) وأسبابها الجذرية",
+      "تصميم تقييم بسيط يلتقط الأخطاء قبل الاعتماد على النظام",
+    ],
+    topics: [
+      "Hallucinations",
+      "Grounding & refusal",
+      "RAG evaluation",
+      "Answer quality",
+      "Failure taxonomy",
+    ],
+    exercises: [
+      "جمع 10 حالات فشل حقيقية وتصنيفها في taxonomy مكتوب",
+      "بناء اختبار تقييم من 10 أسئلة مع مفاتيح إجابة",
+    ],
+    deliverables: ["تقرير تقييم لنظام RAG مع عيوبه وخطة تحسين"],
+    masteryCriteria: [
+      "أصمم اختبار تقييم لأي نظام RAG خلال ساعة",
+      "أفرّق بين خطأ استرجاع وخطأ توليد في حالة فشل معينة",
+    ],
+    tasks: [
+      makeTask(
+        "w19-t1",
+        19,
+        "دراسة الهلاوس والتقييم من دورة Hugging Face",
+        "study",
+        120,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w19-t2",
+        19,
+        "جمع وتصنيف 10 حالات فشل من نظامك",
+        "exercise",
+        120,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w19-t3",
+        19,
+        "بناء اختبار تقييم من 10 أسئلة بمفاتيح إجابة",
+        "exercise",
+        90,
+        ["hf-llm-course"],
+      ),
+      makeTask(
+        "w19-t4",
+        19,
+        "تسليم تقرير التقييم مع خطة التحسين",
+        "deliverable",
+        120,
+      ),
+      makeTask(
+        "w19-t5",
+        19,
+        "مراجعة المرحلة الرابعة: ما الذي تغيّر في فهمك للنماذج اللغوية؟",
+        "review",
+        45,
+      ),
+    ],
+    resourceIds: ["hf-llm-course"],
+  },
+];
+
+export const phase4Bundle: PhaseBundle = { phase, weeks };
