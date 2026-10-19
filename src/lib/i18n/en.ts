@@ -272,6 +272,8 @@ export const en: Dict = {
   "resources.search": "Search resources",
   "resources.empty": "No resources match your search",
   "resources.official": "Official",
+  "resources.filter.phase": "Phase",
+  "resources.filter.kind": "Kind",
   "resources.status": "Your status",
   "resources.weeks": "Weeks: {weeks}",
   "resources.notes": "Your notes",

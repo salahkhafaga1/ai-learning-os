@@ -269,6 +269,8 @@ export const ar = {
   "resources.search": "ابحث في المصادر",
   "resources.empty": "لا مصادر مطابقة لبحثك",
   "resources.official": "رسمي",
+  "resources.filter.phase": "المرحلة",
+  "resources.filter.kind": "النوع",
   "resources.status": "حالتك",
   "resources.weeks": "الأسابيع: {weeks}",
   "resources.notes": "ملاحظاتك",

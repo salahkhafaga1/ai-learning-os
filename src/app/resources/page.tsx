@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ResourcesView } from "@/components/resources/resources-view";
 import { PageHeader } from "@/components/ui/page-header";
 import { ar } from "@/lib/i18n/ar";
 
@@ -11,6 +12,7 @@ export default function ResourcesPage() {
         title={ar["resources.title"]}
         subtitle={ar["resources.subtitle"]}
       />
+      <ResourcesView />
     </div>
   );
 }
