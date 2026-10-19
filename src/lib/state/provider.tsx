@@ -28,6 +28,7 @@ interface AppStateContextValue {
   hydration: "loading" | "ready";
   loadWarning?: LoadWarningCode;
   writeFailed: boolean;
+  storageKind: "local" | "memory" | null;
 }
 
 const AppStateContext = createContext<AppStateContextValue | null>(null);
@@ -52,6 +53,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     undefined,
   );
   const [writeFailed, setWriteFailed] = useState(false);
+  const [storageKind, setStorageKind] = useState<"local" | "memory" | null>(
+    null,
+  );
   const repoRef = useRef<LearningRepository | null>(null);
 
   useEffect(() => {
@@ -70,6 +74,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "data/load", state: result.state });
     const publish = setTimeout(() => {
       setLoadWarning(result.warning ?? fallbackWarning);
+      setStorageKind(repo.kind);
       setHydration("ready");
     }, 0);
     return () => clearTimeout(publish);
@@ -107,12 +112,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   }, [state.settings.theme, hydration]);
 
   const reset = useCallback(() => {
+    repoRef.current?.reset();
     dispatch({ type: "data/reset" });
   }, []);
 
   const contextValue = useMemo<AppStateContextValue>(
-    () => ({ state, hydration, loadWarning, writeFailed }),
-    [state, hydration, loadWarning, writeFailed],
+    () => ({ state, hydration, loadWarning, writeFailed, storageKind }),
+    [state, hydration, loadWarning, writeFailed, storageKind],
   );
 
   return (

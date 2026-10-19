@@ -287,6 +287,7 @@ export const en: Dict = {
   "settings.roadmapTargetEnd": "Target end date",
   "settings.roadmapHint":
     "Changing the start recomputes every week date (unless manually overridden).",
+  "settings.computedEnd": "Computed roadmap end: {date}",
   "settings.appearance": "Appearance",
   "settings.theme": "Theme",
   "settings.theme.dark": "Dark",
@@ -295,16 +296,24 @@ export const en: Dict = {
   "settings.language": "Language",
   "settings.language.ar": "Arabic",
   "settings.language.en": "English",
+  "settings.storage.label": "Data location",
+  "settings.storage.local": "Saved locally in your browser",
+  "settings.storage.memory": "Temporary memory — progress won't persist",
+  "settings.method.title": "How progress is calculated",
+  "settings.method.body":
+    "Progress counts only completed eligible tasks, study time comes from logged minutes only, and skill mastery is proven by written evidence — never inferred from task completion.",
   "settings.data": "Data & backup",
   "settings.export": "Export JSON",
   "settings.import": "Import JSON",
   "settings.import.success": "Import completed successfully",
+  "settings.import.review": "Review import",
   "settings.import.error.invalid_json": "The file is not valid JSON.",
   "settings.import.error.not_our_app":
     "This file is not an AI Learning OS backup.",
   "settings.import.error.invalid_shape": "The file structure is invalid.",
   "settings.import.error.unsupported_version":
     "The file version is newer than this app.",
+  "settings.import.paste": "Paste the backup content here",
   "settings.import.confirmTitle": "Confirm import",
   "settings.import.confirmBody":
     "Importing will replace all current progress. Tasks: {tasks} · Sessions: {sessions} · Assessed skills: {skills}.",

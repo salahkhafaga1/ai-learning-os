@@ -284,6 +284,7 @@ export const ar = {
   "settings.roadmapTargetEnd": "تاريخ النهاية المستهدف",
   "settings.roadmapHint":
     "تغيير البداية يعيد حساب تواريخ كل الأسابيع (ما لم يوجد تعديل يدوي).",
+  "settings.computedEnd": "نهاية الخريطة المحسوبة: {date}",
   "settings.appearance": "المظهر",
   "settings.theme": "الثيم",
   "settings.theme.dark": "داكن",
@@ -292,15 +293,23 @@ export const ar = {
   "settings.language": "اللغة",
   "settings.language.ar": "العربية",
   "settings.language.en": "الإنجليزية",
+  "settings.storage.label": "مكان حفظ البيانات",
+  "settings.storage.local": "حفظ محلي في المتصفح",
+  "settings.storage.memory": "ذاكرة مؤقتة — لا يُحفظ التقدم",
+  "settings.method.title": "كيف يُحتسب التقدم؟",
+  "settings.method.body":
+    "التقدم يُحتسب من المهام المؤهلة المكتملة فقط، ووقت الدراسة من الدقائق المسجلة في سجل الدراسة فقط، وإتقان المهارات يُثبَت بأدلة مكتوبة — لا يُحتسب تلقائيًا من إكمال المهام.",
   "settings.data": "البيانات والنسخ الاحتياطي",
   "settings.export": "تصدير JSON",
   "settings.import": "استيراد JSON",
   "settings.import.success": "تم الاستيراد بنجاح",
+  "settings.import.review": "مراجعة الاستيراد",
   "settings.import.error.invalid_json": "الملف ليس JSON صالحًا.",
   "settings.import.error.not_our_app": "هذا الملف ليس نسخة من AI Learning OS.",
   "settings.import.error.invalid_shape": "بنية الملف غير صحيحة.",
   "settings.import.error.unsupported_version":
     "إصدار الملف أحدث من التطبيق الحالي.",
+  "settings.import.paste": "الصق هنا محتوى النسخة الاحتياطية",
   "settings.import.confirmTitle": "تأكيد الاستيراد",
   "settings.import.confirmBody":
     "سيستبدل الاستيراد كل تقدمك الحالي. المهام: {tasks} · الجلسات: {sessions} · المهارات المقيمة: {skills}.",
