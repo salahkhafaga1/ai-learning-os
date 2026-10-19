@@ -16,14 +16,20 @@ export function useSavedFlash(): [boolean, () => void] {
   return [visible, flash];
 }
 
-export function SavedHint({ visible }: { visible: boolean }) {
+export function SavedHint({
+  visible,
+  label,
+}: {
+  visible: boolean;
+  label?: string;
+}) {
   const { t } = useT();
   if (!visible) {
     return null;
   }
   return (
     <span role="status" className="text-[11px] font-medium text-success">
-      {t("common.saved")}
+      {label ?? t("common.saved")}
     </span>
   );
 }
