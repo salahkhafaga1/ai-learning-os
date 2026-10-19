@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
+import { I18nProvider } from "@/lib/i18n";
 import { AppStateProvider } from "@/lib/state/provider";
 import "./globals.css";
 
@@ -34,7 +35,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${arabic.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <AppStateProvider>{children}</AppStateProvider>
+        <AppStateProvider>
+          <I18nProvider>{children}</I18nProvider>
+        </AppStateProvider>
       </body>
     </html>
   );
