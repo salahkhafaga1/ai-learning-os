@@ -13,9 +13,10 @@ const TASK_STATUSES = [
 export interface StatusControlProps {
   value: TaskStatus;
   onChange: (status: TaskStatus) => void;
+  label?: string;
 }
 
-export function StatusControl({ value, onChange }: StatusControlProps) {
+export function StatusControl({ value, onChange, label }: StatusControlProps) {
   const { t } = useT();
 
   return (
@@ -26,7 +27,7 @@ export function StatusControl({ value, onChange }: StatusControlProps) {
       }))}
       value={value}
       onChange={onChange}
-      label={t("week.tasks")}
+      label={label ?? t("week.tasks")}
       className="flex-wrap"
     />
   );

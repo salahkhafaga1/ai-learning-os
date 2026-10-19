@@ -4,7 +4,7 @@ import { cn } from "@/components/ui/cn";
 import type { Task, TaskStatus } from "@/domain/types";
 import { useT } from "@/lib/i18n";
 import { ResourceChips } from "./resource-chips";
-import { StatusControl } from "./status-control";
+import { StatusControl } from "@/components/ui/status-control";
 
 export interface TaskRowProps {
   task: Task;
