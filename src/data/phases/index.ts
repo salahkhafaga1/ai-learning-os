@@ -6,6 +6,8 @@ import { phase3Bundle } from "./phase-3-nextjs";
 import { phase4Bundle } from "./phase-4-llm-rag";
 import { phase5Bundle } from "./phase-5-agentic";
 import { phase6Bundle } from "./phase-6-mlops";
+import { phase7Bundle } from "./phase-7-embedded-iot";
+import { phase8Bundle } from "./phase-8-integration-portfolio";
 
 const bundles: PhaseBundle[] = [
   phase1Bundle,
@@ -14,6 +16,8 @@ const bundles: PhaseBundle[] = [
   phase4Bundle,
   phase5Bundle,
   phase6Bundle,
+  phase7Bundle,
+  phase8Bundle,
 ];
 
 export const allPhases: Phase[] = bundles.map((bundle) => bundle.phase);

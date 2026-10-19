@@ -72,6 +72,31 @@ describe("seed integrity", () => {
     }
   });
 
+  it("covers the entire roadmap: exactly 8 phases and 37 sequential weeks", () => {
+    expect(allPhases).toHaveLength(8);
+    expect(allWeeks).toHaveLength(37);
+
+    const weekNumbers = allWeeks.map((w) => w.number).sort((a, b) => a - b);
+    expect(weekNumbers).toEqual(Array.from({ length: 37 }, (_, i) => i + 1));
+
+    const covered = allPhases
+      .flatMap((p) => p.weekNumbers)
+      .sort((a, b) => a - b);
+    expect(covered).toEqual(Array.from({ length: 37 }, (_, i) => i + 1));
+
+    for (const phase of allPhases) {
+      expect(phase.objectives.length, phase.id).toBeGreaterThanOrEqual(2);
+      expect(phase.weekNumbers.length, phase.id).toBeGreaterThan(0);
+      const fromWeeks = allWeeks
+        .filter((w) => w.phaseId === phase.id)
+        .map((w) => w.number)
+        .sort((a, b) => a - b);
+      expect(fromWeeks, phase.id).toEqual(
+        [...phase.weekNumbers].sort((a, b) => a - b),
+      );
+    }
+  });
+
   it("contains no placeholder text in any authored week", () => {
     const serialized = JSON.stringify(allWeeks);
     expect(serialized).not.toMatch(/TODO|TBD|lorem|placeholder|xxx/i);
