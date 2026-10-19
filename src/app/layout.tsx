@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic, JetBrains_Mono } from "next/font/google";
+import { AppStateProvider } from "@/lib/state/provider";
 import "./globals.css";
 
 const arabic = IBM_Plex_Sans_Arabic({
@@ -32,7 +33,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-theme="dark"
       className={`${arabic.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <AppStateProvider>{children}</AppStateProvider>
+      </body>
     </html>
   );
 }
