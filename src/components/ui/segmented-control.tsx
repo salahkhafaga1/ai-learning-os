@@ -12,6 +12,7 @@ export interface SegmentedControlProps<T extends string> {
   value: T;
   onChange: (value: T) => void;
   label?: string;
+  disabledValues?: readonly T[];
   className?: string;
 }
 
@@ -20,6 +21,7 @@ export function SegmentedControl<T extends string>({
   value,
   onChange,
   label,
+  disabledValues,
   className,
 }: SegmentedControlProps<T>) {
   return (
@@ -33,18 +35,21 @@ export function SegmentedControl<T extends string>({
     >
       {options.map((option) => {
         const active = option.value === value;
+        const disabled = disabledValues?.includes(option.value) ?? false;
         return (
           <button
             key={option.value}
             type="button"
             role="radio"
             aria-checked={active}
+            disabled={disabled}
             onClick={() => onChange(option.value)}
             className={cn(
               "rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
               active
                 ? "bg-accent text-white"
                 : "text-muted hover:text-ink",
+              disabled && "cursor-not-allowed opacity-40",
             )}
           >
             {option.label}
