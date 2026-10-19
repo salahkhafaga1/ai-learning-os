@@ -32,20 +32,20 @@ describe("createLocalStorageRepository", () => {
     window.localStorage.clear();
   });
 
-  it("starts fresh when storage is empty", () => {
+  it("starts fresh when storage is empty", async () => {
     const repo = createLocalStorageRepository(window.localStorage);
     expect(repo.kind).toBe("local");
-    const result = repo.load();
+    const result = await repo.load();
     expect(result.status).toBe("fresh");
     expect(result.state).toEqual(createSeedState());
   });
 
-  it("roundtrips a saved state through a versioned envelope", () => {
+  it("roundtrips a saved state through a versioned envelope", async () => {
     const repo = createLocalStorageRepository(window.localStorage);
     const state = createSeedState();
     state.taskStatus["w1-t1"] = "done";
     state.weekNotes["1"] = "أسبوع التنسورات";
-    expect(repo.save(state)).toEqual({ ok: true });
+    expect(await repo.save(state)).toEqual({ ok: true });
 
     const raw = window.localStorage.getItem(STORAGE_KEY);
     expect(raw).not.toBeNull();
@@ -57,19 +57,19 @@ describe("createLocalStorageRepository", () => {
     expect(envelope.version).toBe(1);
     expect(typeof envelope.savedAt).toBe("string");
 
-    const result = repo.load();
+    const result = await repo.load();
     expect(result.status).toBe("loaded");
     expect(result.state).toEqual(state);
 
-    repo.reset();
+    await repo.reset();
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
-    expect(repo.load().status).toBe("fresh");
+    expect((await repo.load()).status).toBe("fresh");
   });
 
-  it("recovers from malformed JSON: backup preserved, original key cleared", () => {
+  it("recovers from malformed JSON: backup preserved, original key cleared", async () => {
     window.localStorage.setItem(STORAGE_KEY, "{oops");
     const repo = createLocalStorageRepository(window.localStorage);
-    const result = repo.load();
+    const result = await repo.load();
     expect(result.status).toBe("recovered");
     expect(result.warning).toBe("malformed_backup");
     expect(result.state).toEqual(createSeedState());
@@ -77,7 +77,7 @@ describe("createLocalStorageRepository", () => {
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 
-  it("recovers from hand-edited JSON with the wrong shape via the same path", () => {
+  it("recovers from hand-edited JSON with the wrong shape via the same path", async () => {
     window.localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
@@ -87,7 +87,7 @@ describe("createLocalStorageRepository", () => {
       }),
     );
     const repo = createLocalStorageRepository(window.localStorage);
-    const result = repo.load();
+    const result = await repo.load();
     expect(result.status).toBe("recovered");
     expect(result.warning).toBe("malformed_backup");
     expect(result.state).toEqual(createSeedState());
@@ -95,7 +95,7 @@ describe("createLocalStorageRepository", () => {
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 
-  it("flags a newer envelope version as incompatible_version", () => {
+  it("flags a newer envelope version as incompatible_version", async () => {
     window.localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({
@@ -105,28 +105,28 @@ describe("createLocalStorageRepository", () => {
       }),
     );
     const repo = createLocalStorageRepository(window.localStorage);
-    const result = repo.load();
+    const result = await repo.load();
     expect(result.status).toBe("recovered");
     expect(result.warning).toBe("incompatible_version");
     expect(result.state).toEqual(createSeedState());
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 
-  it("returns write_failed on quota errors and keeps serving the last good state", () => {
+  it("returns write_failed on quota errors and keeps serving the last good state", async () => {
     const flakyState = { failing: false };
     const flaky = createFlakyStorage(window.localStorage, flakyState);
     const repo = createLocalStorageRepository(flaky);
 
     const first = createSeedState();
     first.weekNotes["1"] = "الملاحظة الأولى";
-    expect(repo.save(first)).toEqual({ ok: true });
+    expect(await repo.save(first)).toEqual({ ok: true });
 
     flakyState.failing = true;
     const second = createSeedState();
     second.weekNotes["1"] = "الملاحظة الثانية";
-    expect(repo.save(second)).toEqual({ ok: false, code: "write_failed" });
+    expect(await repo.save(second)).toEqual({ ok: false, code: "write_failed" });
 
-    const result = repo.load();
+    const result = await repo.load();
     expect(result.status).toBe("loaded");
     expect(result.state.weekNotes["1"]).toBe("الملاحظة الأولى");
   });

@@ -42,7 +42,12 @@ export function DataSection() {
   const [saved, flash] = useSavedFlash();
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-  const isMemory = storageKind === "memory";
+  const storageLabelKey =
+    storageKind === "supabase"
+      ? "settings.storage.supabase"
+      : storageKind === "memory"
+        ? "settings.storage.memory"
+        : "settings.storage.local";
 
   const handleExport = () => {
     const { json, fileName } = buildExport(state);
@@ -96,8 +101,8 @@ export function DataSection() {
           <span className="text-xs font-medium text-ink-2">
             {t("settings.storage.label")}
           </span>
-          <Badge tone={isMemory ? "warning" : "success"}>
-            {t(isMemory ? "settings.storage.memory" : "settings.storage.local")}
+          <Badge tone={storageKind === "memory" ? "warning" : "success"}>
+            {t(storageLabelKey)}
           </Badge>
         </div>
 

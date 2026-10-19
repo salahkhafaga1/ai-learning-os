@@ -9,7 +9,7 @@ import type {
   SaveResult,
 } from "./types";
 
-function resolveWindowStorage(): Storage | null {
+export function resolveWindowStorage(): Storage | null {
   if (typeof window === "undefined") {
     return null;
   }
@@ -57,7 +57,7 @@ export function createLocalStorageRepository(
   return {
     kind: "local",
 
-    load(): LoadResult {
+    async load(): Promise<LoadResult> {
       if (!target) {
         return {
           status: "fresh",
@@ -100,7 +100,7 @@ export function createLocalStorageRepository(
       return { status: "loaded", state: parsed.state };
     },
 
-    save(state: AppState): SaveResult {
+    async save(state: AppState): Promise<SaveResult> {
       if (!target) {
         return { ok: false, code: "storage_unavailable" };
       }
@@ -117,7 +117,7 @@ export function createLocalStorageRepository(
       }
     },
 
-    reset(): void {
+    async reset(): Promise<void> {
       if (!target) {
         return;
       }

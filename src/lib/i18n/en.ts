@@ -299,6 +299,7 @@ export const en: Dict = {
   "settings.storage.label": "Data location",
   "settings.storage.local": "Saved locally in your browser",
   "settings.storage.memory": "Temporary memory — progress won't persist",
+  "settings.storage.supabase": "Saved to Supabase",
   "settings.method.title": "How progress is calculated",
   "settings.method.body":
     "Progress counts only completed eligible tasks, study time comes from logged minutes only, and skill mastery is proven by written evidence — never inferred from task completion.",
@@ -334,6 +335,8 @@ export const en: Dict = {
   "warning.openSettings": "Open settings",
   "warning.storage_unavailable":
     "Local storage is unavailable in this browser; progress lasts for this session only.",
+  "warning.remote_unavailable":
+    "Supabase is unreachable; showing the local copy and new changes may not be saved.",
   "warning.write_failed":
     "Failed to save the last change — storage may be full.",
   "error.boundary.title": "Something went wrong",

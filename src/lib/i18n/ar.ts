@@ -296,6 +296,7 @@ export const ar = {
   "settings.storage.label": "مكان حفظ البيانات",
   "settings.storage.local": "حفظ محلي في المتصفح",
   "settings.storage.memory": "ذاكرة مؤقتة — لا يُحفظ التقدم",
+  "settings.storage.supabase": "محفوظ على Supabase",
   "settings.method.title": "كيف يُحتسب التقدم؟",
   "settings.method.body":
     "التقدم يُحتسب من المهام المؤهلة المكتملة فقط، ووقت الدراسة من الدقائق المسجلة في سجل الدراسة فقط، وإتقان المهارات يُثبَت بأدلة مكتوبة — لا يُحتسب تلقائيًا من إكمال المهام.",
@@ -330,6 +331,8 @@ export const ar = {
   "warning.openSettings": "فتح الإعدادات",
   "warning.storage_unavailable":
     "التخزين المحلي غير متاح في هذا المتصفح؛ سيُحفظ التقدم لهذه الجلسة فقط.",
+  "warning.remote_unavailable":
+    "تعذر الوصول إلى Supabase؛ نعرض نسخة محلية وقد لا تُحفظ التغييرات الجديدة.",
   "warning.write_failed": "فشل حفظ آخر تغيير — قد تكون مساحة التخزين ممتلئة.",
   "error.boundary.title": "حدث خطأ غير متوقع",
   "error.boundary.body":

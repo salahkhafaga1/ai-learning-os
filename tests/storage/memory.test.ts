@@ -3,16 +3,16 @@ import { createSeedState } from "@/data/seed";
 import { createMemoryRepository } from "@/lib/storage/memory";
 
 describe("createMemoryRepository", () => {
-  it("starts fresh with a state deep-equal to the seed", () => {
+  it("starts fresh with a state deep-equal to the seed", async () => {
     const repo = createMemoryRepository();
     expect(repo.kind).toBe("memory");
-    const result = repo.load();
+    const result = await repo.load();
     expect(result.status).toBe("fresh");
     expect(result.warning).toBeUndefined();
     expect(result.state).toEqual(createSeedState());
   });
 
-  it("roundtrips a saved state as loaded", () => {
+  it("roundtrips a saved state as loaded", async () => {
     const repo = createMemoryRepository();
     const state = createSeedState();
     state.taskStatus["w1-t1"] = "done";
@@ -27,44 +27,44 @@ describe("createMemoryRepository", () => {
       questions: "",
       createdAt: "2026-10-20T10:00:00.000Z",
     });
-    expect(repo.save(state)).toEqual({ ok: true });
-    const result = repo.load();
+    expect(await repo.save(state)).toEqual({ ok: true });
+    const result = await repo.load();
     expect(result.status).toBe("loaded");
     expect(result.state).toEqual(state);
   });
 
-  it("resets back to fresh after saving", () => {
+  it("resets back to fresh after saving", async () => {
     const repo = createMemoryRepository();
     const state = createSeedState();
     state.taskStatus["w1-t1"] = "done";
-    repo.save(state);
-    repo.reset();
-    const result = repo.load();
+    await repo.save(state);
+    await repo.reset();
+    const result = await repo.load();
     expect(result.status).toBe("fresh");
     expect(result.state.taskStatus["w1-t1"]).toBe("todo");
     expect(result.state).toEqual(createSeedState());
   });
 
-  it("isolates stored state from later caller and reader mutations", () => {
+  it("isolates stored state from later caller and reader mutations", async () => {
     const repo = createMemoryRepository();
     const state = createSeedState();
-    repo.save(state);
+    await repo.save(state);
     state.taskStatus["w1-t1"] = "done";
-    const first = repo.load();
+    const first = await repo.load();
     expect(first.state.taskStatus["w1-t1"]).toBe("todo");
     first.state.taskStatus["w1-t2"] = "done";
-    const second = repo.load();
+    const second = await repo.load();
     expect(second.state.taskStatus["w1-t2"]).toBe("todo");
   });
 
-  it("serves the most recently saved state", () => {
+  it("serves the most recently saved state", async () => {
     const repo = createMemoryRepository();
     const first = createSeedState();
     first.weekNotes["1"] = "الملاحظة الأولى";
-    repo.save(first);
+    await repo.save(first);
     const second = createSeedState();
     second.weekNotes["1"] = "الملاحظة الثانية";
-    repo.save(second);
-    expect(repo.load().state.weekNotes["1"]).toBe("الملاحظة الثانية");
+    await repo.save(second);
+    expect((await repo.load()).state.weekNotes["1"]).toBe("الملاحظة الثانية");
   });
 });

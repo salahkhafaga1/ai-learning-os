@@ -52,8 +52,8 @@ src/
                         validation (roadmap/session/due-date warnings)
   lib/i18n/             ar/en dictionaries — key parity enforced by tests
   lib/state/            reducer, provider (hydration + persistence), selectors
-  lib/storage/          LearningRepository (types.ts) + localStorage & memory adapters,
-                        Zod schema, export/import
+  lib/storage/          LearningRepository (types.ts) + localStorage, memory & Supabase
+                        adapters, Zod schema, export/import
 tests/                  vitest suites mirroring src/ (domain, data, state, storage, i18n)
 ```
 
@@ -62,8 +62,13 @@ and versioned with the app; only _user_ state is persisted.
 
 ## Storage, backup & restore
 
-- Storage key: `ai-learning-os.state.v1` (localStorage). Envelope:
-  `{ version: 1, savedAt, state }`.
+- **Supabase mode (default when configured)**: with the env vars below set, the single
+  `learning_state` row in Supabase is the source of truth and localStorage becomes an
+  offline mirror: on first run any existing local progress is migrated up automatically;
+  an unreachable cloud falls back to the mirror with a warning; failed uploads still keep
+  the change locally.
+- Storage key: `ai-learning-os.state.v1` (localStorage — the primary store in local mode,
+  the mirror in Supabase mode). Envelope: `{ version: 1, savedAt, state }`.
 - If a saved payload is unreadable, the raw copy is preserved under the backup key
   `ai-learning-os.state.v1.corrupt` and the app continues from a fresh state (a banner
   explains this and links to Settings).
@@ -91,12 +96,50 @@ and versioned with the app; only _user_ state is persisted.
 Dark navy theme by default, with light and system options. Arabic RTL by default with an
 English (LTR) toggle. Both dictionaries must carry the same keys (a test enforces parity).
 
-## Replacing local storage with a backend (Supabase)
+## Supabase storage
 
 Persistence sits behind a small seam: `LearningRepository { kind, load, save, reset }` in
-`src/lib/storage/types.ts`. The provider (`src/lib/state/provider.tsx`) selects the
-localStorage adapter, falls back to memory, and exposes storage status to the UI. To move
-to Supabase, implement the same interface (map `load`/`save`/`reset` onto a table row) and
-swap the adapter where the provider creates it — the reducer, selectors, and every view
-stay unchanged. Export/import and the recovery banner keep working because they rely only
-on the envelope shape.
+`src/lib/storage/types.ts`. The provider (`src/lib/state/provider.tsx`) picks the adapter:
+
+1. **Supabase** — when `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+   are set.
+2. **localStorage** — otherwise, when available.
+3. **In-memory** — last resort, with a session-only warning.
+
+To enable Supabase, create `.env.local` (gitignored) with your project's values:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+```
+
+and create the table once in the Supabase SQL editor:
+
+```sql
+create table if not exists public.learning_state (
+  id text primary key,
+  envelope jsonb not null,
+  saved_at timestamptz not null default now()
+);
+
+alter table public.learning_state enable row level security;
+
+drop policy if exists "single user access" on public.learning_state;
+
+create policy "single user access"
+  on public.learning_state
+  for all
+  using (true)
+  with check (true);
+```
+
+There is no auth by design (single-user app). The publishable key is safe to ship in the
+client bundle, but with the policy above anyone holding the URL + key can read/write the
+row — use a private project, or add auth before storing anything sensitive.
+
+Behavior: the row (`id = 'default'`) holds the same `{ version, savedAt, state }` envelope
+as local storage. On load, an empty cloud migrates the local mirror up; an unreachable
+cloud serves the mirror with a `remote_unavailable` warning; a malformed or newer-version
+payload is preserved under the corrupt backup key and recovered like local mode. The
+reducer, selectors, and every view stay unchanged, and export/import keeps working because
+it relies only on the envelope shape.

@@ -8,19 +8,19 @@ export function createMemoryRepository(): LearningRepository {
   return {
     kind: "memory",
 
-    load(): LoadResult {
+    async load(): Promise<LoadResult> {
       if (stored === null) {
         return { status: "fresh", state: createSeedState() };
       }
       return { status: "loaded", state: structuredClone(stored) };
     },
 
-    save(state: AppState): SaveResult {
+    async save(state: AppState): Promise<SaveResult> {
       stored = structuredClone(state);
       return { ok: true };
     },
 
-    reset(): void {
+    async reset(): Promise<void> {
       stored = null;
     },
   };

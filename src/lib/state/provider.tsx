@@ -17,8 +17,14 @@ import type { AppState } from "@/domain/types";
 import {
   createLocalStorageRepository,
   isStorageAvailable,
+  resolveWindowStorage,
 } from "@/lib/storage/local-storage";
 import { createMemoryRepository } from "@/lib/storage/memory";
+import {
+  createSupabaseEnvelopeStore,
+  createSupabaseRepository,
+  getSupabaseConfig,
+} from "@/lib/storage/supabase";
 import type { LearningRepository, LoadWarningCode } from "@/lib/storage/types";
 import type { Action } from "./actions";
 import { reducer } from "./reducer";
@@ -28,7 +34,7 @@ interface AppStateContextValue {
   hydration: "loading" | "ready";
   loadWarning?: LoadWarningCode;
   writeFailed: boolean;
-  storageKind: "local" | "memory" | null;
+  storageKind: "local" | "memory" | "supabase" | null;
 }
 
 const AppStateContext = createContext<AppStateContextValue | null>(null);
@@ -53,9 +59,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     undefined,
   );
   const [writeFailed, setWriteFailed] = useState(false);
-  const [storageKind, setStorageKind] = useState<"local" | "memory" | null>(
-    null,
-  );
+  const [storageKind, setStorageKind] = useState<
+    "local" | "memory" | "supabase" | null
+  >(null);
   const repoRef = useRef<LearningRepository | null>(null);
   const initializedRef = useRef(false);
 
@@ -69,22 +75,30 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }
     initializedRef.current = true;
 
-    let repo: LearningRepository;
-    let fallbackWarning: LoadWarningCode | undefined;
+    void (async () => {
+      let repo: LearningRepository;
+      let fallbackWarning: LoadWarningCode | undefined;
 
-    if (isStorageAvailable()) {
-      repo = createLocalStorageRepository(window.localStorage);
-    } else {
-      repo = createMemoryRepository();
-      fallbackWarning = "storage_unavailable";
-    }
+      const supabase = getSupabaseConfig();
+      if (supabase) {
+        repo = createSupabaseRepository({
+          store: createSupabaseEnvelopeStore(supabase),
+          storage: resolveWindowStorage(),
+        });
+      } else if (isStorageAvailable()) {
+        repo = createLocalStorageRepository(window.localStorage);
+      } else {
+        repo = createMemoryRepository();
+        fallbackWarning = "storage_unavailable";
+      }
 
-    repoRef.current = repo;
-    const result = repo.load();
-    dispatch({ type: "data/load", state: result.state });
-    setLoadWarning(result.warning ?? fallbackWarning);
-    setStorageKind(repo.kind);
-    setHydration("ready");
+      repoRef.current = repo;
+      const result = await repo.load();
+      dispatch({ type: "data/load", state: result.state });
+      setLoadWarning(result.warning ?? fallbackWarning);
+      setStorageKind(repo.kind);
+      setHydration("ready");
+    })();
   }, []);
 
   useEffect(() => {
@@ -96,8 +110,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       return;
     }
     const timer = setTimeout(() => {
-      const result = repo.save(state);
-      setWriteFailed(!result.ok);
+      void repo.save(state).then((result) => {
+        setWriteFailed(!result.ok);
+      });
     }, 250);
     return () => clearTimeout(timer);
   }, [state, hydration]);
@@ -119,7 +134,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   }, [state.settings.theme, hydration]);
 
   const reset = useCallback(() => {
-    repoRef.current?.reset();
+    void repoRef.current?.reset();
     dispatch({ type: "data/reset" });
   }, []);
 
