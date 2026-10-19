@@ -20,10 +20,14 @@ import {
   weekTaskProgress,
 } from "@/domain/progress";
 import type { Resource } from "@/domain/types";
+import { validateRoadmap } from "@/domain/validation";
 import { useT } from "@/lib/i18n";
 import { useAppDispatch, useAppState } from "@/lib/state/provider";
 import { useTodayISO } from "@/lib/state/use-today";
+import { DateOverrideControl } from "./date-override-control";
+import { ReviewForm } from "./review-form";
 import { TaskRow } from "./task-row";
+import { WeekBlocker, WeekNotes } from "./week-notes";
 
 const NAV_LINK_CLASS =
   "inline-flex h-8 items-center gap-1 rounded-lg border border-edge bg-surface-2 px-3 text-xs font-medium text-ink transition-colors hover:border-accent/60";
@@ -109,6 +113,11 @@ export function WeekView({ weekNumber }: { weekNumber: number }) {
   const resources = week.resourceIds
     .map((id) => resourceById[id])
     .filter((resource): resource is Resource => Boolean(resource));
+  const conflicts = validateRoadmap(
+    roadmap,
+    state.settings,
+    state.weekDateOverrides,
+  ).filter((issue) => issue.scope === "week" && issue.ref === week.number);
   const prevWeek = weekNumber > 1 ? weekNumber - 1 : null;
   const nextWeek = weekNumber < allWeeks.length ? weekNumber + 1 : null;
 
@@ -150,6 +159,9 @@ export function WeekView({ weekNumber }: { weekNumber: number }) {
             <span dir="ltr">{t("week.range", range)}</span>
           </span>
           <StatusBadge status={status} />
+          {conflicts.length > 0 ? (
+            <Badge tone="warning">{t("week.conflictBadge")}</Badge>
+          ) : null}
         </div>
         <div className="mt-4 flex flex-col gap-1.5">
           <ProgressBar
@@ -200,6 +212,25 @@ export function WeekView({ weekNumber }: { weekNumber: number }) {
         </div>
       </Card>
 
+      <div className="grid gap-4 lg:grid-cols-2">
+        <WeekNotes
+          key={`notes-${week.number}`}
+          weekNumber={week.number}
+          initialNote={state.weekNotes[String(week.number)] ?? ""}
+        />
+        <WeekBlocker
+          key={`blocker-${week.number}`}
+          weekNumber={week.number}
+          initialBlocker={state.weekBlockers[String(week.number)] ?? ""}
+        />
+      </div>
+
+      <ReviewForm
+        key={`review-${week.number}`}
+        weekNumber={week.number}
+        initialReview={state.reviews[String(week.number)]}
+      />
+
       <Card>
         <CardHeader title={t("week.topics")} />
         <div className="flex flex-wrap gap-1.5 p-5">
@@ -249,6 +280,12 @@ export function WeekView({ weekNumber }: { weekNumber: number }) {
           </ul>
         </Card>
       ) : null}
+
+      <DateOverrideControl
+        weekNumber={week.number}
+        overrideISO={state.weekDateOverrides[String(week.number)]}
+        conflicts={conflicts}
+      />
     </div>
   );
 }
