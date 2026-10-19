@@ -2,11 +2,11 @@
 
 import { ArrowLeft, ArrowRight, CalendarRange } from "lucide-react";
 import Link from "next/link";
-import { Badge, type BadgeTone } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { roadmap } from "@/data/roadmap";
 import { effectiveWeekRange } from "@/domain/dates";
 import {
@@ -15,19 +15,11 @@ import {
   weekStatusFor,
   weekTaskProgress,
 } from "@/domain/progress";
-import type { PhaseStatus } from "@/domain/types";
 import { validateRoadmap } from "@/domain/validation";
 import { useT } from "@/lib/i18n";
 import { useAppState } from "@/lib/state/provider";
 import { IssuesBanner } from "./issues-banner";
 import { WeekRow } from "./week-row";
-
-const STATUS_TONE: Record<PhaseStatus, BadgeTone> = {
-  not_started: "neutral",
-  in_progress: "accent",
-  blocked: "danger",
-  completed: "success",
-};
 
 const NAV_LINK_CLASS =
   "inline-flex h-8 items-center gap-1 rounded-lg border border-edge bg-surface-2 px-3 text-xs font-medium text-ink transition-colors hover:border-accent/60";
@@ -120,7 +112,7 @@ export function PhaseView({ phaseId }: { phaseId: string }) {
 
       <Card className="p-5">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge tone={STATUS_TONE[status]}>{t(`phaseStatus.${status}`)}</Badge>
+          <StatusBadge status={status} />
           <span className="text-xs text-muted">
             {t("roadmap.weeks", { count: phaseWeeks.length })}
           </span>

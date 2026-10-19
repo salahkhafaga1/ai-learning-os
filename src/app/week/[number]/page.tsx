@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { PageHeader } from "@/components/ui/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { WeekView } from "@/components/week/week-view";
 import { allWeeks } from "@/data/phases";
 import { ar } from "@/lib/i18n/ar";
 
@@ -23,13 +23,7 @@ async function WeekContent({ params }: PageProps<"/week/[number]">) {
     notFound();
   }
 
-  const weekLabel = ar["common.week"].replace("{n}", String(week.number));
-
-  return (
-    <div className="flex flex-col gap-6">
-      <PageHeader title={weekLabel} subtitle={week.title} />
-    </div>
-  );
+  return <WeekView weekNumber={weekNumber} />;
 }
 
 export default function WeekPage(props: PageProps<"/week/[number]">) {
